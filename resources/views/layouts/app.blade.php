@@ -99,7 +99,11 @@
                                     <i class="fas fa-users"></i> RH
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="hrDropdown">
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-user-tie"></i> Employés</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('employees.index') }}"><i class="fas fa-user-tie"></i> Employés</a></li>
+                                    @can('create_employees')
+                                    <li><a class="dropdown-item" href="{{ route('employees.create') }}"><i class="fas fa-plus"></i> Nouvel Employé</a></li>
+                                    @endcan
+                                    <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="#"><i class="fas fa-id-card"></i> Permis</a></li>
                                     <li><a class="dropdown-item" href="#"><i class="fas fa-graduation-cap"></i> Formations</a></li>
                                 </ul>
