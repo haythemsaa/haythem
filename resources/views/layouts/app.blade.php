@@ -86,7 +86,11 @@
                                     <i class="fas fa-tools"></i> Maintenance
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="maintenanceDropdown">
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-wrench"></i> Interventions</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('interventions.index') }}"><i class="fas fa-wrench"></i> Interventions</a></li>
+                                    @can('create_interventions')
+                                    <li><a class="dropdown-item" href="{{ route('interventions.create') }}"><i class="fas fa-plus"></i> Nouvelle Intervention</a></li>
+                                    @endcan
+                                    <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="#"><i class="fas fa-clipboard-check"></i> Plan Préventif</a></li>
                                     <li><a class="dropdown-item" href="#"><i class="fas fa-tire"></i> Pneumatiques</a></li>
                                 </ul>

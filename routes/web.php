@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\InterventionController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -26,8 +27,14 @@ Route::middleware(['auth'])->group(function () {
     // Gestion RH - Employés
     Route::resource('employees', EmployeeController::class);
 
+    // Maintenance GMAO - Interventions
+    Route::resource('interventions', InterventionController::class);
+    Route::post('/interventions/{intervention}/mark-urgent', [InterventionController::class, 'markAsUrgent'])
+        ->name('interventions.mark-urgent');
+    Route::post('/interventions/{intervention}/close', [InterventionController::class, 'close'])
+        ->name('interventions.close');
+
     // TODO: Ajouter les routes pour les autres modules
-    // Route::resource('interventions', InterventionController::class);
     // Route::resource('fuel-consumptions', FuelConsumptionController::class);
     // etc...
 });
