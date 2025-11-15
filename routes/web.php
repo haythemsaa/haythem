@@ -8,6 +8,7 @@ use App\Http\Controllers\InterventionController;
 use App\Http\Controllers\FuelConsumptionController;
 use App\Http\Controllers\VehicleDocumentController;
 use App\Http\Controllers\AccidentController;
+use App\Http\Controllers\TrafficViolationController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -58,8 +59,11 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/accident-documents/{accidentDocument}', [AccidentController::class, 'deleteDocument'])
         ->name('accident-documents.destroy');
 
+    // Infractions Routières
+    Route::resource('traffic-violations', TrafficViolationController::class);
+
     // TODO: Ajouter les routes pour les autres modules
-    // Route::resource('traffic-violations', TrafficViolationController::class);
     // Route::resource('tires', TireController::class);
+    // Route::resource('transport-orders', TransportOrderController::class);
     // etc...
 });

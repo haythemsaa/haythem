@@ -62,6 +62,12 @@ class RolePermissionSeeder extends Seeder
             'delete_accidents',
             'close_accidents',
 
+            // Traffic Violations
+            'view_violations',
+            'create_violations',
+            'edit_violations',
+            'delete_violations',
+
             // Stocks
             'view_stock',
             'create_purchase_orders',
@@ -114,6 +120,7 @@ class RolePermissionSeeder extends Seeder
             'view_fuel', 'create_fuel', 'edit_fuel',
             'view_documents', 'create_documents', 'edit_documents',
             'view_accidents', 'create_accidents', 'edit_accidents', 'close_accidents',
+            'view_violations', 'create_violations', 'edit_violations',
             'view_gps', 'view_gps_alerts',
         ]);
 
@@ -132,6 +139,7 @@ class RolePermissionSeeder extends Seeder
             'view_employees', 'create_employees', 'edit_employees', 'delete_employees',
             'view_trainings', 'create_trainings',
             'view_accidents',
+            'view_violations',
             'view_vehicles',
         ]);
 

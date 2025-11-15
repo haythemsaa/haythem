@@ -94,6 +94,12 @@
                                     <li><a class="dropdown-item" href="{{ route('accidents.create') }}"><i class="fas fa-plus"></i> Déclarer Accident</a></li>
                                     @endcan
                                     @endcan
+                                    @can('view_violations')
+                                    <li><a class="dropdown-item" href="{{ route('traffic-violations.index') }}"><i class="fas fa-exclamation-circle"></i> Infractions</a></li>
+                                    @can('create_violations')
+                                    <li><a class="dropdown-item" href="{{ route('traffic-violations.create') }}"><i class="fas fa-plus"></i> Nouvelle Infraction</a></li>
+                                    @endcan
+                                    @endcan
                                 </ul>
                             </li>
                             @endcan
