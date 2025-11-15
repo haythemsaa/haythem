@@ -80,7 +80,13 @@
                                     <li><a class="dropdown-item" href="{{ route('fuel-consumptions.create') }}"><i class="fas fa-plus"></i> Ravitaillement</a></li>
                                     @endcan
                                     @endcan
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-file-alt"></i> Documents</a></li>
+                                    @can('view_documents')
+                                    <li><a class="dropdown-item" href="{{ route('vehicle-documents.index') }}"><i class="fas fa-file-alt"></i> Documents</a></li>
+                                    @can('create_documents')
+                                    <li><a class="dropdown-item" href="{{ route('vehicle-documents.create') }}"><i class="fas fa-plus"></i> Nouveau Document</a></li>
+                                    @endcan
+                                    <li><a class="dropdown-item" href="{{ route('vehicle-documents.alerts') }}"><i class="fas fa-bell"></i> Alertes</a></li>
+                                    @endcan
                                 </ul>
                             </li>
                             @endcan
