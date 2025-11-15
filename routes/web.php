@@ -9,6 +9,7 @@ use App\Http\Controllers\FuelConsumptionController;
 use App\Http\Controllers\VehicleDocumentController;
 use App\Http\Controllers\AccidentController;
 use App\Http\Controllers\TrafficViolationController;
+use App\Http\Controllers\DrivingLicenseController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -62,8 +63,16 @@ Route::middleware(['auth'])->group(function () {
     // Infractions Routières
     Route::resource('traffic-violations', TrafficViolationController::class);
 
+    // Permis de Conduire
+    Route::resource('driving-licenses', DrivingLicenseController::class);
+    Route::get('/driving-licenses-alerts', [DrivingLicenseController::class, 'alerts'])
+        ->name('driving-licenses.alerts');
+    Route::post('/driving-licenses/{drivingLicense}/update-points', [DrivingLicenseController::class, 'updatePoints'])
+        ->name('driving-licenses.update-points');
+
     // TODO: Ajouter les routes pour les autres modules
+    // Route::resource('certifications', CertificationController::class);
+    // Route::resource('trainings', TrainingController::class);
     // Route::resource('tires', TireController::class);
-    // Route::resource('transport-orders', TransportOrderController::class);
     // etc...
 });

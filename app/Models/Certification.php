@@ -5,24 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class DrivingLicense extends Model
+class Certification extends Model
 {
     protected $fillable = [
         'employee_id',
-        'license_number',
+        'name',
+        'certification_number',
         'issue_date',
         'expiry_date',
-        'categories',
-        'points',
-        'restrictions',
+        'issuing_organization',
         'attachment',
     ];
 
     protected $casts = [
         'issue_date' => 'date',
         'expiry_date' => 'date',
-        'categories' => 'array',
-        'points' => 'integer',
     ];
 
     // Relations
@@ -45,7 +42,7 @@ class DrivingLicense extends Model
         if (!$this->expiry_date || $this->is_expired) {
             return false;
         }
-        return $this->expiry_date->diffInDays(now()) <= 60; // 2 months
+        return $this->expiry_date->diffInDays(now()) <= 30; // 1 month
     }
 
     public function getDaysUntilExpiryAttribute(): ?int
@@ -78,34 +75,27 @@ class DrivingLicense extends Model
         return 'Valide';
     }
 
-    public function getPointsStatusAttribute(): string
+    public function getCertificationTypeAttribute(): string
     {
-        if ($this->points <= 0) {
-            return 'critical';
-        }
-        if ($this->points <= 3) {
-            return 'danger';
-        }
-        if ($this->points <= 6) {
-            return 'warning';
-        }
-        return 'success';
-    }
+        // Common certifications in Morocco/France
+        $types = [
+            'CACES' => 'CACES (Certificat d\'Aptitude à la Conduite En Sécurité)',
+            'ADR' => 'ADR (Transport de Matières Dangereuses)',
+            'FIMO' => 'FIMO (Formation Initiale Minimale Obligatoire)',
+            'FCO' => 'FCO (Formation Continue Obligatoire)',
+            'AIPR' => 'AIPR (Autorisation d\'Intervention à Proximité des Réseaux)',
+            'SST' => 'SST (Sauveteur Secouriste du Travail)',
+            'CACES R489' => 'CACES R489 (Chariots automoteurs)',
+            'CACES R482' => 'CACES R482 (Engins de chantier)',
+        ];
 
-    public function getPointsColorAttribute(): string
-    {
-        return match($this->points_status) {
-            'critical' => 'dark',
-            'danger' => 'danger',
-            'warning' => 'warning',
-            'success' => 'success',
-            default => 'secondary',
-        };
-    }
+        foreach ($types as $key => $value) {
+            if (str_contains(strtoupper($this->name), $key)) {
+                return $value;
+            }
+        }
 
-    public function getCategoriesListAttribute(): string
-    {
-        return is_array($this->categories) ? implode(', ', $this->categories) : '';
+        return $this->name;
     }
 
     // Scopes
@@ -115,7 +105,7 @@ class DrivingLicense extends Model
                     ->where('expiry_date', '<', now());
     }
 
-    public function scopeExpiringSoon($query, $days = 60)
+    public function scopeExpiringSoon($query, $days = 30)
     {
         return $query->whereNotNull('expiry_date')
                     ->where('expiry_date', '>', now())
@@ -130,13 +120,13 @@ class DrivingLicense extends Model
         });
     }
 
-    public function scopeLowPoints($query, $threshold = 6)
-    {
-        return $query->where('points', '<=', $threshold);
-    }
-
     public function scopeByEmployee($query, $employeeId)
     {
         return $query->where('employee_id', $employeeId);
+    }
+
+    public function scopeByType($query, $type)
+    {
+        return $query->where('name', 'like', "%{$type}%");
     }
 }
