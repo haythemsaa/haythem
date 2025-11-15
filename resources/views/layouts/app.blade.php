@@ -74,7 +74,12 @@
                                     <li><a class="dropdown-item" href="{{ route('vehicles.create') }}"><i class="fas fa-plus"></i> Nouveau Véhicule</a></li>
                                     @endcan
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-gas-pump"></i> Carburant</a></li>
+                                    @can('view_fuel')
+                                    <li><a class="dropdown-item" href="{{ route('fuel-consumptions.index') }}"><i class="fas fa-gas-pump"></i> Carburant</a></li>
+                                    @can('create_fuel')
+                                    <li><a class="dropdown-item" href="{{ route('fuel-consumptions.create') }}"><i class="fas fa-plus"></i> Ravitaillement</a></li>
+                                    @endcan
+                                    @endcan
                                     <li><a class="dropdown-item" href="#"><i class="fas fa-file-alt"></i> Documents</a></li>
                                 </ul>
                             </li>

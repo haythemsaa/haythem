@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\InterventionController;
+use App\Http\Controllers\FuelConsumptionController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -34,7 +35,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/interventions/{intervention}/close', [InterventionController::class, 'close'])
         ->name('interventions.close');
 
+    // Carburant - Consommations
+    Route::resource('fuel-consumptions', FuelConsumptionController::class);
+    Route::get('/fuel-analytics', [FuelConsumptionController::class, 'analytics'])
+        ->name('fuel-consumptions.analytics');
+
     // TODO: Ajouter les routes pour les autres modules
-    // Route::resource('fuel-consumptions', FuelConsumptionController::class);
+    // Route::resource('documents', DocumentController::class);
     // etc...
 });
