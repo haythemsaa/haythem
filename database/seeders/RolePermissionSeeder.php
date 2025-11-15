@@ -25,8 +25,18 @@ class RolePermissionSeeder extends Seeder
             'edit_vehicles',
             'delete_vehicles',
             'assign_vehicles',
-            'view_fuel_consumptions',
-            'create_fuel_consumptions',
+
+            // Fuel
+            'view_fuel',
+            'create_fuel',
+            'edit_fuel',
+            'delete_fuel',
+
+            // Documents
+            'view_documents',
+            'create_documents',
+            'edit_documents',
+            'delete_documents',
 
             // Maintenance
             'view_interventions',
@@ -44,6 +54,13 @@ class RolePermissionSeeder extends Seeder
             'delete_employees',
             'view_trainings',
             'create_trainings',
+
+            // Accidents
+            'view_accidents',
+            'create_accidents',
+            'edit_accidents',
+            'delete_accidents',
+            'close_accidents',
 
             // Stocks
             'view_stock',
@@ -94,7 +111,9 @@ class RolePermissionSeeder extends Seeder
         $fleetManager = Role::create(['name' => 'Gestionnaire de Flotte']);
         $fleetManager->givePermissionTo([
             'view_vehicles', 'create_vehicles', 'edit_vehicles', 'assign_vehicles',
-            'view_fuel_consumptions', 'create_fuel_consumptions',
+            'view_fuel', 'create_fuel', 'edit_fuel',
+            'view_documents', 'create_documents', 'edit_documents',
+            'view_accidents', 'create_accidents', 'edit_accidents', 'close_accidents',
             'view_gps', 'view_gps_alerts',
         ]);
 
@@ -112,6 +131,7 @@ class RolePermissionSeeder extends Seeder
         $hrManager->givePermissionTo([
             'view_employees', 'create_employees', 'edit_employees', 'delete_employees',
             'view_trainings', 'create_trainings',
+            'view_accidents',
             'view_vehicles',
         ]);
 

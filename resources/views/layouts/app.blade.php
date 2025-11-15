@@ -87,6 +87,13 @@
                                     @endcan
                                     <li><a class="dropdown-item" href="{{ route('vehicle-documents.alerts') }}"><i class="fas fa-bell"></i> Alertes</a></li>
                                     @endcan
+                                    <li><hr class="dropdown-divider"></li>
+                                    @can('view_accidents')
+                                    <li><a class="dropdown-item" href="{{ route('accidents.index') }}"><i class="fas fa-car-crash"></i> Accidents</a></li>
+                                    @can('create_accidents')
+                                    <li><a class="dropdown-item" href="{{ route('accidents.create') }}"><i class="fas fa-plus"></i> Déclarer Accident</a></li>
+                                    @endcan
+                                    @endcan
                                 </ul>
                             </li>
                             @endcan

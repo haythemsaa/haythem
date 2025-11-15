@@ -7,6 +7,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\InterventionController;
 use App\Http\Controllers\FuelConsumptionController;
 use App\Http\Controllers\VehicleDocumentController;
+use App\Http\Controllers\AccidentController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -48,7 +49,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/vehicle-documents/{vehicleDocument}/download', [VehicleDocumentController::class, 'download'])
         ->name('vehicle-documents.download');
 
+    // Accidents et Sinistres
+    Route::resource('accidents', AccidentController::class);
+    Route::post('/accidents/{accident}/close', [AccidentController::class, 'close'])
+        ->name('accidents.close');
+    Route::post('/accidents/{accident}/upload-document', [AccidentController::class, 'uploadDocument'])
+        ->name('accidents.upload-document');
+    Route::delete('/accident-documents/{accidentDocument}', [AccidentController::class, 'deleteDocument'])
+        ->name('accident-documents.destroy');
+
     // TODO: Ajouter les routes pour les autres modules
-    // Route::resource('accidents', AccidentController::class);
+    // Route::resource('traffic-violations', TrafficViolationController::class);
+    // Route::resource('tires', TireController::class);
     // etc...
 });
