@@ -14,6 +14,7 @@ use App\Http\Controllers\CertificationController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\TireController;
 use App\Http\Controllers\MedicalCheckupController;
+use App\Http\Controllers\PersonalProtectiveEquipmentController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -97,6 +98,11 @@ Route::middleware(['auth'])->group(function () {
         ->name('medical-checkups.alerts');
     Route::get('/medical-checkups/{medicalCheckup}/download', [MedicalCheckupController::class, 'download'])
         ->name('medical-checkups.download');
+
+    // EPI - Équipements de Protection Individuelle
+    Route::resource('ppe', PersonalProtectiveEquipmentController::class);
+    Route::get('/ppe-alerts', [PersonalProtectiveEquipmentController::class, 'alerts'])
+        ->name('ppe.alerts');
 
     // TODO: Ajouter les routes pour les autres modules
     // etc...

@@ -149,6 +149,9 @@
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="{{ route('medical-checkups.index') }}"><i class="fas fa-heartbeat"></i> Visites Médicales</a></li>
                                     <li><a class="dropdown-item" href="{{ route('medical-checkups.alerts') }}"><i class="fas fa-bell"></i> Alertes Médicales</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{{ route('ppe.index') }}"><i class="fas fa-hard-hat"></i> EPI</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('ppe.alerts') }}"><i class="fas fa-bell"></i> Alertes EPI</a></li>
                                 </ul>
                             </li>
                             @endcan
