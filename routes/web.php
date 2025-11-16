@@ -19,6 +19,7 @@ use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\RentalController;
 use App\Http\Controllers\TcoController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\InventoryPartController;
 
@@ -140,4 +141,17 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/tco/calculate', [TcoController::class, 'calculate'])->name('tco.calculate');
     Route::post('/tco/compare', [TcoController::class, 'compare'])->name('tco.compare');
     Route::post('/tco/export', [TcoController::class, 'export'])->name('tco.export');
+
+    // Exports
+    Route::prefix('export')->name('export.')->group(function () {
+        Route::get('/vehicle/{vehicle}', [ExportController::class, 'vehicle'])->name('vehicle');
+        Route::get('/fleet', [ExportController::class, 'fleet'])->name('fleet');
+        Route::get('/maintenance', [ExportController::class, 'maintenance'])->name('maintenance');
+        Route::get('/fuel', [ExportController::class, 'fuel'])->name('fuel');
+        Route::get('/insurance', [ExportController::class, 'insurance'])->name('insurance');
+        Route::get('/rental', [ExportController::class, 'rental'])->name('rental');
+        Route::post('/tco', [ExportController::class, 'tco'])->name('tco');
+        Route::get('/accidents', [ExportController::class, 'accidents'])->name('accidents');
+        Route::get('/violations', [ExportController::class, 'violations'])->name('violations');
+    });
 });
