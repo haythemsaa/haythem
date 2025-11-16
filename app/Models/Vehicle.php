@@ -151,6 +151,16 @@ class Vehicle extends Model
         return $this->hasMany(GpsAlert::class);
     }
 
+    public function gpsLocations(): HasMany
+    {
+        return $this->hasMany(GpsLocation::class);
+    }
+
+    public function latestGpsLocation()
+    {
+        return $this->hasOne(GpsLocation::class)->latestOfMany('recorded_at');
+    }
+
     // Accessors & Mutators
     public function getFullNameAttribute(): string
     {
