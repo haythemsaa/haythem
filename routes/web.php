@@ -18,6 +18,7 @@ use App\Http\Controllers\PersonalProtectiveEquipmentController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\RentalController;
+use App\Http\Controllers\TcoController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\InventoryPartController;
 
@@ -133,4 +134,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('inventory-parts', InventoryPartController::class);
     Route::get('/inventory-parts-alerts', [InventoryPartController::class, 'alerts'])
         ->name('inventory-parts.alerts');
+
+    // TCO Calculator
+    Route::get('/tco', [TcoController::class, 'index'])->name('tco.index');
+    Route::post('/tco/calculate', [TcoController::class, 'calculate'])->name('tco.calculate');
+    Route::post('/tco/compare', [TcoController::class, 'compare'])->name('tco.compare');
+    Route::post('/tco/export', [TcoController::class, 'export'])->name('tco.export');
 });
