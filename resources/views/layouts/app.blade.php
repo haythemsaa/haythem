@@ -146,6 +146,9 @@
                                     @can('view_trainings')
                                     <li><a class="dropdown-item" href="{{ route('trainings.index') }}"><i class="fas fa-graduation-cap"></i> Formations</a></li>
                                     @endcan
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{{ route('medical-checkups.index') }}"><i class="fas fa-heartbeat"></i> Visites Médicales</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('medical-checkups.alerts') }}"><i class="fas fa-bell"></i> Alertes Médicales</a></li>
                                 </ul>
                             </li>
                             @endcan

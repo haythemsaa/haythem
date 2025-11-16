@@ -13,6 +13,7 @@ use App\Http\Controllers\DrivingLicenseController;
 use App\Http\Controllers\CertificationController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\TireController;
+use App\Http\Controllers\MedicalCheckupController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -90,7 +91,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/tires/{tire}/rotate', [TireController::class, 'storeRotation'])
         ->name('tires.store-rotation');
 
+    // Visites Médicales
+    Route::resource('medical-checkups', MedicalCheckupController::class);
+    Route::get('/medical-checkups-alerts', [MedicalCheckupController::class, 'alerts'])
+        ->name('medical-checkups.alerts');
+    Route::get('/medical-checkups/{medicalCheckup}/download', [MedicalCheckupController::class, 'download'])
+        ->name('medical-checkups.download');
+
     // TODO: Ajouter les routes pour les autres modules
-    // Route::resource('medical-checkups', MedicalCheckupController::class);
     // etc...
 });
