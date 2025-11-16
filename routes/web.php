@@ -12,6 +12,7 @@ use App\Http\Controllers\TrafficViolationController;
 use App\Http\Controllers\DrivingLicenseController;
 use App\Http\Controllers\CertificationController;
 use App\Http\Controllers\TrainingController;
+use App\Http\Controllers\TireController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -80,8 +81,16 @@ Route::middleware(['auth'])->group(function () {
     // Formations
     Route::resource('trainings', TrainingController::class);
 
+    // Pneumatiques
+    Route::resource('tires', TireController::class);
+    Route::get('/tires-alerts', [TireController::class, 'alerts'])
+        ->name('tires.alerts');
+    Route::get('/tires/{tire}/rotate', [TireController::class, 'rotate'])
+        ->name('tires.rotate');
+    Route::post('/tires/{tire}/rotate', [TireController::class, 'storeRotation'])
+        ->name('tires.store-rotation');
+
     // TODO: Ajouter les routes pour les autres modules
-    // Route::resource('tires', TireController::class);
     // Route::resource('medical-checkups', MedicalCheckupController::class);
     // etc...
 });

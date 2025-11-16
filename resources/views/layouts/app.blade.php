@@ -115,8 +115,15 @@
                                     <li><a class="dropdown-item" href="{{ route('interventions.create') }}"><i class="fas fa-plus"></i> Nouvelle Intervention</a></li>
                                     @endcan
                                     <li><hr class="dropdown-divider"></li>
+                                    @can('view_vehicles')
+                                    <li><a class="dropdown-item" href="{{ route('tires.index') }}"><i class="fas fa-tire"></i> Pneumatiques</a></li>
+                                    @can('create_vehicles')
+                                    <li><a class="dropdown-item" href="{{ route('tires.create') }}"><i class="fas fa-plus"></i> Nouveau Pneu</a></li>
+                                    @endcan
+                                    <li><a class="dropdown-item" href="{{ route('tires.alerts') }}"><i class="fas fa-bell"></i> Alertes Usure</a></li>
+                                    @endcan
+                                    <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="#"><i class="fas fa-clipboard-check"></i> Plan Préventif</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-tire"></i> Pneumatiques</a></li>
                                 </ul>
                             </li>
                             @endcan
