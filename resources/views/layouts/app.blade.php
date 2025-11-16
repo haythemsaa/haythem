@@ -100,6 +100,10 @@
                                     <li><a class="dropdown-item" href="{{ route('traffic-violations.create') }}"><i class="fas fa-plus"></i> Nouvelle Infraction</a></li>
                                     @endcan
                                     @endcan
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{{ route('insurances.index') }}"><i class="fas fa-shield-alt"></i> Assurances</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('contracts.index') }}"><i class="fas fa-file-contract"></i> Contrats</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('rentals.index') }}"><i class="fas fa-handshake"></i> Locations</a></li>
                                 </ul>
                             </li>
                             @endcan
@@ -162,9 +166,10 @@
                                     <i class="fas fa-boxes"></i> Stocks
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="stockDropdown">
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-warehouse"></i> Entrepôts</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-shopping-cart"></i> Commandes</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-box-open"></i> Articles</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('inventory-parts.index') }}"><i class="fas fa-cogs"></i> Pièces</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('inventory-parts.alerts') }}"><i class="fas fa-bell"></i> Alertes Stock</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{{ route('suppliers.index') }}"><i class="fas fa-truck"></i> Fournisseurs</a></li>
                                 </ul>
                             </li>
                             @endcan

@@ -15,6 +15,11 @@ use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\TireController;
 use App\Http\Controllers\MedicalCheckupController;
 use App\Http\Controllers\PersonalProtectiveEquipmentController;
+use App\Http\Controllers\InsuranceController;
+use App\Http\Controllers\ContractController;
+use App\Http\Controllers\RentalController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\InventoryPartController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -104,6 +109,28 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/ppe-alerts', [PersonalProtectiveEquipmentController::class, 'alerts'])
         ->name('ppe.alerts');
 
-    // TODO: Ajouter les routes pour les autres modules
-    // etc...
+    // Assurances
+    Route::resource('insurances', InsuranceController::class);
+    Route::get('/insurances-alerts', [InsuranceController::class, 'alerts'])
+        ->name('insurances.alerts');
+    Route::get('/insurances/{insurance}/download', [InsuranceController::class, 'download'])
+        ->name('insurances.download');
+
+    // Contrats
+    Route::resource('contracts', ContractController::class);
+    Route::get('/contracts-alerts', [ContractController::class, 'alerts'])
+        ->name('contracts.alerts');
+
+    // Locations
+    Route::resource('rentals', RentalController::class);
+    Route::post('/rentals/{rental}/complete', [RentalController::class, 'complete'])
+        ->name('rentals.complete');
+
+    // Fournisseurs
+    Route::resource('suppliers', SupplierController::class);
+
+    // Stock/Pièces
+    Route::resource('inventory-parts', InventoryPartController::class);
+    Route::get('/inventory-parts-alerts', [InventoryPartController::class, 'alerts'])
+        ->name('inventory-parts.alerts');
 });
