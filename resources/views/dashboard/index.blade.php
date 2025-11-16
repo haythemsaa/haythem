@@ -304,18 +304,15 @@
         </div>
     </div>
 
-    <!-- Charts Section (Placeholder for future implementation) -->
+    <!-- Charts Section -->
     <div class="row">
         <div class="col-md-6 mb-4">
             <div class="card">
                 <div class="card-header bg-light">
                     <h5 class="mb-0"><i class="fas fa-chart-pie"></i> Répartition par Statut</h5>
                 </div>
-                <div class="card-body text-center">
-                    <p class="text-muted">Graphique à venir (Chart.js)</p>
-                    <div style="height: 250px; background-color: #f8f9fa; border-radius: 5px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-chart-pie fa-4x text-muted"></i>
-                    </div>
+                <div class="card-body">
+                    <canvas id="statusChart" height="250"></canvas>
                 </div>
             </div>
         </div>
@@ -323,12 +320,53 @@
         <div class="col-md-6 mb-4">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h5 class="mb-0"><i class="fas fa-chart-line"></i> Évolution Mensuelle</h5>
+                    <h5 class="mb-0"><i class="fas fa-chart-line"></i> Tendance Carburant (12 mois)</h5>
                 </div>
-                <div class="card-body text-center">
-                    <p class="text-muted">Graphique à venir (Chart.js)</p>
-                    <div style="height: 250px; background-color: #f8f9fa; border-radius: 5px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-chart-line fa-4x text-muted"></i>
+                <div class="card-body">
+                    <canvas id="fuelTrendChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Coûts Maintenance (12 mois)</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="maintenanceTrendChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="fas fa-chart-area"></i> Revenus Location (12 mois)</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="revenueTrendChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fleet Alerts -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="fas fa-bell"></i> Alertes Flotte</h5>
+                </div>
+                <div class="card-body">
+                    <div id="alertsContainer">
+                        <div class="text-center py-3">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Chargement...</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -336,3 +374,273 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Vehicle Status Pie Chart
+    const statusCtx = document.getElementById('statusChart').getContext('2d');
+    new Chart(statusCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Disponible', 'En Mission', 'En Maintenance', 'Hors Service'],
+            datasets: [{
+                data: [{{ $availableVehicles }}, {{ $totalVehicles - $availableVehicles - $inMaintenanceVehicles }}, {{ $inMaintenanceVehicles }}, 0],
+                backgroundColor: [
+                    'rgba(40, 167, 69, 0.8)',
+                    'rgba(0, 123, 255, 0.8)',
+                    'rgba(255, 193, 7, 0.8)',
+                    'rgba(220, 53, 69, 0.8)'
+                ],
+                borderColor: [
+                    'rgba(40, 167, 69, 1)',
+                    'rgba(0, 123, 255, 1)',
+                    'rgba(255, 193, 7, 1)',
+                    'rgba(220, 53, 69, 1)'
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return label + ': ' + value + ' (' + percentage + '%)';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Fetch and display Fuel Trend
+    fetch('/api/dashboard/trends?type=fuel&months=12', {
+        headers: {
+            'Authorization': 'Bearer {{ auth()->user()?->createToken("dashboard")->plainTextToken ?? "" }}',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.data.length > 0) {
+            const fuelCtx = document.getElementById('fuelTrendChart').getContext('2d');
+            new Chart(fuelCtx, {
+                type: 'line',
+                data: {
+                    labels: data.data.map(item => item.month),
+                    datasets: [{
+                        label: 'Coût Carburant (DH)',
+                        data: data.data.map(item => item.total_cost),
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString() + ' DH';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    })
+    .catch(error => console.error('Fuel trend error:', error));
+
+    // Fetch and display Maintenance Trend
+    fetch('/api/dashboard/trends?type=maintenance&months=12', {
+        headers: {
+            'Authorization': 'Bearer {{ auth()->user()?->createToken("dashboard")->plainTextToken ?? "" }}',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.data.length > 0) {
+            const maintenanceCtx = document.getElementById('maintenanceTrendChart').getContext('2d');
+            new Chart(maintenanceCtx, {
+                type: 'bar',
+                data: {
+                    labels: data.data.map(item => item.month),
+                    datasets: [{
+                        label: 'Coût Maintenance (DH)',
+                        data: data.data.map(item => item.total_cost),
+                        backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString() + ' DH';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    })
+    .catch(error => console.error('Maintenance trend error:', error));
+
+    // Fetch and display Revenue Trend
+    fetch('/api/dashboard/trends?type=revenue&months=12', {
+        headers: {
+            'Authorization': 'Bearer {{ auth()->user()?->createToken("dashboard")->plainTextToken ?? "" }}',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.data.length > 0) {
+            const revenueCtx = document.getElementById('revenueTrendChart').getContext('2d');
+            new Chart(revenueCtx, {
+                type: 'line',
+                data: {
+                    labels: data.data.map(item => item.month),
+                    datasets: [{
+                        label: 'Revenus Location (DH)',
+                        data: data.data.map(item => item.total_revenue),
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString() + ' DH';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    })
+    .catch(error => console.error('Revenue trend error:', error));
+
+    // Fetch and display alerts
+    fetch('/api/dashboard/alerts', {
+        headers: {
+            'Authorization': 'Bearer {{ auth()->user()?->createToken("dashboard")->plainTextToken ?? "" }}',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const alertsContainer = document.getElementById('alertsContainer');
+            let alertsHtml = '';
+
+            // Critical Alerts
+            if (data.data.critical && data.data.critical.length > 0) {
+                data.data.critical.forEach(alert => {
+                    alertsHtml += `
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle"></i> <strong>${alert.title || 'Alerte Critique'}</strong><br>
+                            ${alert.message}
+                            ${alert.action_url ? `<a href="${alert.action_url}" class="alert-link ms-2">Voir détails</a>` : ''}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    `;
+                });
+            }
+
+            // Warning Alerts
+            if (data.data.warnings && data.data.warnings.length > 0) {
+                data.data.warnings.forEach(alert => {
+                    alertsHtml += `
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle"></i> <strong>${alert.title || 'Avertissement'}</strong><br>
+                            ${alert.message}
+                            ${alert.action_url ? `<a href="${alert.action_url}" class="alert-link ms-2">Voir détails</a>` : ''}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    `;
+                });
+            }
+
+            // Info Alerts
+            if (data.data.info && data.data.info.length > 0) {
+                data.data.info.forEach(alert => {
+                    alertsHtml += `
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            <i class="fas fa-info-circle"></i> <strong>${alert.title || 'Information'}</strong><br>
+                            ${alert.message}
+                            ${alert.action_url ? `<a href="${alert.action_url}" class="alert-link ms-2">Voir détails</a>` : ''}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    `;
+                });
+            }
+
+            if (alertsHtml === '') {
+                alertsHtml = `
+                    <div class="alert alert-success mb-0" role="alert">
+                        <i class="fas fa-check-circle"></i> Aucune alerte. Tout va bien !
+                    </div>
+                `;
+            }
+
+            alertsContainer.innerHTML = alertsHtml;
+        }
+    })
+    .catch(error => {
+        console.error('Alerts error:', error);
+        document.getElementById('alertsContainer').innerHTML = `
+            <div class="alert alert-warning mb-0" role="alert">
+                <i class="fas fa-exclamation-triangle"></i> Impossible de charger les alertes
+            </div>
+        `;
+    });
+});
+</script>
+@endpush
