@@ -13,6 +13,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RolePermissionSeeder::class,
+            SettingsSeeder::class,
+            SitesSeeder::class,
             FleetDataSeeder::class,
         ]);
 
@@ -21,5 +23,8 @@ class DatabaseSeeder extends Seeder
         $this->command->info('🔐 Utilisateur Admin créé:');
         $this->command->info('   Email: admin@fleet.com');
         $this->command->info('   Password: password123');
+        $this->command->info('');
+        $this->command->info('⚙️  Paramètres système configurés');
+        $this->command->info('🏢 Sites/dépôts créés (Casablanca, Rabat, Marrakech, Tanger, Agadir)');
     }
 }

@@ -12,44 +12,36 @@ class Supplier extends Model
 
     protected $fillable = [
         'name',
-        'supplier_code',
-        'supplier_type',
-        'contact_person',
-        'email',
-        'phone',
+        'code',
+        'type',
         'address',
         'city',
-        'postal_code',
         'country',
+        'phone',
+        'email',
         'tax_id',
-        'payment_terms',
-        'status',
+        'bank_account',
         'notes',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
     ];
 
     public function scopeActive($query)
     {
-        return $query->where('status', 'active');
+        return $query->where('is_active', true);
     }
 
     public function getStatusLabelAttribute(): string
     {
-        return match($this->status) {
-            'active' => 'Actif',
-            'inactive' => 'Inactif',
-            'suspended' => 'Suspendu',
-            default => $this->status,
-        };
+        return $this->is_active ? 'Actif' : 'Inactif';
     }
 
     public function getStatusColorAttribute(): string
     {
-        return match($this->status) {
-            'active' => 'success',
-            'inactive' => 'secondary',
-            'suspended' => 'warning',
-            default => 'secondary',
-        };
+        return $this->is_active ? 'success' : 'secondary';
     }
 
     protected static function boot()
@@ -57,8 +49,8 @@ class Supplier extends Model
         parent::boot();
 
         static::creating(function ($supplier) {
-            if (!$supplier->supplier_code) {
-                $supplier->supplier_code = 'SUP-' . strtoupper(substr(uniqid(), -6));
+            if (!$supplier->code) {
+                $supplier->code = 'SUP-' . strtoupper(substr(uniqid(), -6));
             }
         });
     }

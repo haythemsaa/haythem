@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Site extends Model
@@ -11,44 +10,46 @@ class Site extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'name',
-        'code',
-        'address',
-        'city',
-        'country',
-        'phone',
-        'email',
-        'is_active',
+        'name', 'code', 'address', 'city', 'country',
+        'phone', 'email', 'is_main', 'is_active'
     ];
 
     protected $casts = [
+        'is_main' => 'boolean',
         'is_active' => 'boolean',
     ];
 
-    // Relations
-    public function vehicles(): HasMany
+    // Relationships
+    public function vehicles()
     {
         return $this->hasMany(Vehicle::class);
     }
 
-    public function parcs(): HasMany
-    {
-        return $this->hasMany(Parc::class);
-    }
-
-    public function employees(): HasMany
+    public function employees()
     {
         return $this->hasMany(Employee::class);
-    }
-
-    public function warehouses(): HasMany
-    {
-        return $this->hasMany(Warehouse::class);
     }
 
     // Scopes
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    public function scopeMain($query)
+    {
+        return $query->where('is_main', true);
+    }
+
+    // Boot
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::creating(function ($site) {
+            if (!$site->code) {
+                $site->code = 'SITE-' . strtoupper(uniqid());
+            }
+        });
     }
 }

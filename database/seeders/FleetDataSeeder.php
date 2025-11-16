@@ -32,7 +32,7 @@ class FleetDataSeeder extends Seeder
             ['name' => 'Agence Sud', 'code' => 'AGS', 'city' => 'Marseille', 'country' => 'France'],
         ];
         foreach ($sites as $siteData) {
-            Site::create($siteData);
+            Site::updateOrCreate(['code' => $siteData['code']], $siteData);
         }
 
         // 2. Créer des parcs
