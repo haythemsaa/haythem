@@ -13,17 +13,22 @@
 ## 📊 PROJECT STATISTICS
 
 ### Code Metrics
-- **Total Files**: 245+ files (PHP, Blade, Markdown)
-- **PHP Files**: 124 files (Controllers, Models, Services, Commands, Policies, Requests)
+- **Total Files**: 260+ files (PHP, Blade, Markdown)
+- **PHP Files**: 140+ files (Controllers, Models, Services, Commands, Policies, Requests, Middleware, Factories)
 - **Blade Templates**: 110+ views
 - **Database Migrations**: 15 migrations
 - **API Endpoints**: 70+ RESTful endpoints
 - **Routes**: 100+ web + API routes
 - **Commands**: 6 artisan commands
-- **Policies**: 4 authorization policies
-- **Seeders**: 8 data seeders
+- **Policies**: 4 authorization policies (fully implemented)
+- **Form Requests**: 3 validation classes
+- **Middleware**: 2 custom middleware
+- **Factories**: 4 model factories
+- **Seeders**: 8 data seeders (fully functional)
 - **Services**: 5 service classes
-- **Total Lines of Code**: 25,000+ lines
+- **Helpers**: 30+ helper functions
+- **Events/Listeners**: 2 events with listeners
+- **Total Lines of Code**: 27,000+ lines
 
 ### Features Implemented
 - ✅ **80+ Features** fully implemented
@@ -171,13 +176,15 @@ Export Service (Multi-format)
 
 ### Infrastructure
 ```
-Policies (Authorization)
-Form Requests (Validation)
-Commands (Automation)
-Events & Listeners (Real-time)
-Seeders (Demo data)
-Observers (Audit trail)
-Middleware (Security)
+Policies (4 complete - Vehicle, Intervention, FuelConsumption, Settings)
+Form Requests (3 validators with French localization)
+Commands (6 artisan - Reports, Alerts, Cleanup, etc.)
+Events & Listeners (VehicleCreated + queued notifications)
+Factories (4 complete - Vehicle, Intervention, FuelConsumption, Employee)
+Seeders (DemoDataSeeder - 100+ records with relationships)
+Observers (AuditObserver - automatic logging)
+Middleware (TrackUserActivity, CheckMaintenanceMode)
+Helpers (30+ utility functions)
 ```
 
 ---
