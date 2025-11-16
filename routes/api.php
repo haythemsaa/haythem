@@ -52,6 +52,33 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('interventions-urgent', [InterventionController::class, 'urgent']);
     Route::get('interventions-stats', [InterventionController::class, 'stats']);
 
+    // Mobile-Optimized Endpoints
+    Route::prefix('mobile')->name('mobile.')->group(function () {
+        // Mobile Dashboard
+        Route::get('dashboard', [\App\Http\Controllers\Api\MobileController::class, 'dashboard']);
+
+        // Quick Actions
+        Route::get('quick-stats', [\App\Http\Controllers\Api\MobileController::class, 'quickStats']);
+
+        // GPS Tracking
+        Route::post('gps/location', [\App\Http\Controllers\Api\MobileController::class, 'updateLocation']);
+        Route::get('gps/nearby-vehicles', [\App\Http\Controllers\Api\MobileController::class, 'nearbyVehicles']);
+
+        // Notifications
+        Route::get('notifications', [\App\Http\Controllers\Api\MobileController::class, 'notifications']);
+        Route::post('notifications/{id}/read', [\App\Http\Controllers\Api\MobileController::class, 'markNotificationRead']);
+
+        // Quick Vehicle Info
+        Route::get('vehicles/search', [\App\Http\Controllers\Api\MobileController::class, 'searchVehicles']);
+        Route::get('vehicles/{vehicle}/quick-info', [\App\Http\Controllers\Api\MobileController::class, 'vehicleQuickInfo']);
+
+        // Quick Fuel Entry
+        Route::post('fuel/quick-entry', [\App\Http\Controllers\Api\MobileController::class, 'quickFuelEntry']);
+
+        // Quick Intervention Report
+        Route::post('interventions/quick-report', [\App\Http\Controllers\Api\MobileController::class, 'quickInterventionReport']);
+    });
+
 });
 
 // Public endpoints (no auth required)
@@ -59,6 +86,7 @@ Route::get('health', function () {
     return response()->json([
         'status' => 'ok',
         'app' => config('app.name'),
-        'version' => '1.0.0'
+        'version' => '1.0.0',
+        'timestamp' => now()->toIso8601String(),
     ]);
 });

@@ -154,4 +154,52 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/accidents', [ExportController::class, 'accidents'])->name('accidents');
         Route::get('/violations', [ExportController::class, 'violations'])->name('violations');
     });
+
+    // Settings Management
+    Route::get('/settings', [\App\Http\Controllers\SettingsController::class, 'index'])
+        ->name('settings.index')
+        ->middleware('can:manage_settings');
+    Route::put('/settings', [\App\Http\Controllers\SettingsController::class, 'update'])
+        ->name('settings.update')
+        ->middleware('can:manage_settings');
+
+    // Audit Trail
+    Route::get('/audit', [\App\Http\Controllers\AuditController::class, 'index'])
+        ->name('audit.index')
+        ->middleware('can:view_audit');
+
+    // Notifications Center
+    Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])
+        ->name('notifications.index');
+    Route::post('/notifications/mark-all-read', [\App\Http\Controllers\NotificationController::class, 'markAllRead'])
+        ->name('notifications.mark-all-read');
+    Route::post('/notifications/{notification}/mark-read', [\App\Http\Controllers\NotificationController::class, 'markRead'])
+        ->name('notifications.mark-read');
+
+    // Batch Operations
+    Route::prefix('vehicles/batch')->name('vehicles.batch.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\BatchVehicleController::class, 'index'])->name('index');
+        Route::post('/status', [\App\Http\Controllers\BatchVehicleController::class, 'batchUpdateStatus'])->name('status');
+        Route::post('/site', [\App\Http\Controllers\BatchVehicleController::class, 'batchAssignSite'])->name('site');
+        Route::post('/export', [\App\Http\Controllers\BatchVehicleController::class, 'batchExport'])->name('export');
+        Route::delete('/delete', [\App\Http\Controllers\BatchVehicleController::class, 'batchDelete'])->name('delete');
+        Route::post('/field', [\App\Http\Controllers\BatchVehicleController::class, 'batchUpdateField'])->name('field');
+    });
+
+    // Reports
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\ReportController::class, 'index'])->name('index');
+        Route::get('/custom', [\App\Http\Controllers\ReportController::class, 'custom'])->name('custom');
+        Route::post('/generate', [\App\Http\Controllers\ReportController::class, 'generate'])->name('generate');
+        Route::get('/scheduled', [\App\Http\Controllers\ReportController::class, 'scheduled'])->name('scheduled');
+        Route::post('/schedule', [\App\Http\Controllers\ReportController::class, 'schedule'])->name('schedule');
+    });
+
+    // GPS Tracking
+    Route::prefix('gps')->name('gps.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\GpsTrackingController::class, 'index'])->name('index');
+        Route::get('/vehicle/{vehicle}', [\App\Http\Controllers\GpsTrackingController::class, 'vehicleTracking'])->name('vehicle');
+        Route::get('/live', [\App\Http\Controllers\GpsTrackingController::class, 'liveTracking'])->name('live');
+        Route::get('/history/{vehicle}', [\App\Http\Controllers\GpsTrackingController::class, 'history'])->name('history');
+    });
 });
