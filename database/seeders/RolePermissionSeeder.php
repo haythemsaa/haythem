@@ -54,6 +54,8 @@ class RolePermissionSeeder extends Seeder
             'delete_employees',
             'view_trainings',
             'create_trainings',
+            'edit_trainings',
+            'delete_trainings',
 
             // Accidents
             'view_accidents',
@@ -137,7 +139,7 @@ class RolePermissionSeeder extends Seeder
         $hrManager = Role::create(['name' => 'Responsable RH']);
         $hrManager->givePermissionTo([
             'view_employees', 'create_employees', 'edit_employees', 'delete_employees',
-            'view_trainings', 'create_trainings',
+            'view_trainings', 'create_trainings', 'edit_trainings', 'delete_trainings',
             'view_accidents',
             'view_violations',
             'view_vehicles',

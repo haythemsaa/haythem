@@ -11,6 +11,7 @@ use App\Http\Controllers\AccidentController;
 use App\Http\Controllers\TrafficViolationController;
 use App\Http\Controllers\DrivingLicenseController;
 use App\Http\Controllers\CertificationController;
+use App\Http\Controllers\TrainingController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -76,8 +77,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/certifications-alerts', [CertificationController::class, 'alerts'])
         ->name('certifications.alerts');
 
+    // Formations
+    Route::resource('trainings', TrainingController::class);
+
     // TODO: Ajouter les routes pour les autres modules
-    // Route::resource('trainings', TrainingController::class);
     // Route::resource('tires', TireController::class);
+    // Route::resource('medical-checkups', MedicalCheckupController::class);
     // etc...
 });

@@ -136,7 +136,9 @@
                                     <li><a class="dropdown-item" href="{{ route('driving-licenses.alerts') }}"><i class="fas fa-bell"></i> Alertes Permis</a></li>
                                     <li><a class="dropdown-item" href="{{ route('certifications.index') }}"><i class="fas fa-certificate"></i> Certifications</a></li>
                                     <li><a class="dropdown-item" href="{{ route('certifications.alerts') }}"><i class="fas fa-bell"></i> Alertes Certifications</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-graduation-cap"></i> Formations</a></li>
+                                    @can('view_trainings')
+                                    <li><a class="dropdown-item" href="{{ route('trainings.index') }}"><i class="fas fa-graduation-cap"></i> Formations</a></li>
+                                    @endcan
                                 </ul>
                             </li>
                             @endcan
